@@ -1,0 +1,230 @@
+.rbac-page {
+  display: grid;
+  gap: 22px;
+}
+
+.rbac-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.rbac-kicker {
+  margin: 0 0 6px;
+  color: #16a34a;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rbac-header h1 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.7rem;
+}
+
+.rbac-header-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  color: #16a34a;
+  background: #dcfce7;
+  border-radius: 8px;
+}
+
+.rbac-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.rbac-summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #0f172a;
+}
+
+.rbac-summary-item svg {
+  color: #2563eb;
+}
+
+.rbac-summary-item strong,
+.rbac-summary-item span {
+  display: block;
+}
+
+.rbac-summary-item span {
+  margin-top: 2px;
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+.rbac-section {
+  display: grid;
+  gap: 14px;
+}
+
+.rbac-section h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.1rem;
+}
+
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.role-card {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.role-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.role-card-top strong {
+  color: #111827;
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.role-admin {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.role-agent {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.role-user {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.role-customer {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.role-card dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.role-card dl div {
+  display: grid;
+  gap: 3px;
+}
+
+.role-card dt {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.role-card dd {
+  margin: 0;
+  color: #111827;
+  font-size: 0.93rem;
+}
+
+.rbac-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.rbac-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.rbac-table th,
+.rbac-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.rbac-table th:first-child,
+.rbac-table td:first-child {
+  text-align: left;
+}
+
+.rbac-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.rbac-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.access-mark {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+}
+
+.access-mark.allow {
+  color: #16a34a;
+  background: #dcfce7;
+}
+
+.access-mark.deny {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+@media (max-width: 760px) {
+  .rbac-summary,
+  .role-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .role-card-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .role-card-top strong {
+    text-align: left;
+  }
+}

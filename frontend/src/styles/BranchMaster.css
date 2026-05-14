@@ -1,0 +1,607 @@
+.branch-page {
+  display: grid;
+  gap: 22px;
+}
+
+.branch-header,
+.branch-form-title,
+.branch-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.branch-header {
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.branch-kicker {
+  margin: 0 0 6px;
+  color: #16a34a;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.branch-header h1,
+.branch-form-title h2,
+.branch-list-header h2 {
+  margin: 0;
+  color: #111827;
+}
+
+.branch-actions,
+.branch-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.branch-tool-btn,
+.branch-submit {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.branch-tool-btn {
+  padding: 0 12px;
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.branch-submit {
+  padding: 0 16px;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.branch-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.branch-stat {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.branch-stat svg {
+  color: #2563eb;
+}
+
+.branch-stat strong {
+  color: #111827;
+  font-size: 1.35rem;
+}
+
+.branch-stat span {
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+.branch-form,
+.branch-list-section {
+  display: grid;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.branch-form-section {
+  display: grid;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.branch-form-section h3 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.branch-field-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.branch-field-grid label {
+  display: grid;
+  gap: 6px;
+  color: #334155;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.branch-field-grid input,
+.branch-field-grid select,
+.branch-filters select,
+.branch-search {
+  min-height: 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.branch-field-grid input,
+.branch-field-grid select,
+.branch-filters select {
+  width: 100%;
+  padding: 0 10px;
+  color: #111827;
+  font: inherit;
+}
+
+.period-editor {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  background: #ffffff;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.period-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #0f6fdc;
+  color: #ffffff;
+}
+
+.period-editor-header strong,
+.period-editor-header span {
+  display: block;
+}
+
+.period-editor-header span {
+  margin-top: 5px;
+  font-size: 0.82rem;
+  opacity: 0.85;
+}
+
+.period-editor-header button,
+.period-footer button {
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #0f6fdc;
+  font-weight: 800;
+  min-height: 34px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.period-week-tabs {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.period-week-tabs span {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.period-week-tabs span.active {
+  background: #dbeafe;
+  color: #0f6fdc;
+}
+
+.period-day-list {
+  display: grid;
+  gap: 8px;
+  padding: 0 16px;
+}
+
+.period-day-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 32px;
+  align-items: start;
+  gap: 10px;
+}
+
+.period-day-name {
+  padding-top: 9px;
+  color: #111827;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.period-ranges {
+  display: grid;
+  gap: 7px;
+}
+
+.period-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.period-range input {
+  width: 98px;
+  min-height: 34px;
+  padding: 0 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #111827;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.period-icon-btn {
+  width: 30px;
+  height: 30px;
+  display: inline-grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.period-icon-btn.add {
+  margin-top: 2px;
+  color: #0f6fdc;
+}
+
+.period-closed {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.period-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-top: 1px solid #e5e7eb;
+  color: #64748b;
+  font-size: 0.86rem;
+}
+
+.clock-popover {
+  position: absolute;
+  right: 18px;
+  bottom: 52px;
+  z-index: 20;
+  width: 438px;
+  display: grid;
+  gap: 18px;
+  padding: 24px 32px 20px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.22);
+}
+
+.clock-title {
+  color: #71717a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.clock-display {
+  display: grid;
+  grid-template-columns: 128px 22px 128px 66px;
+  align-items: center;
+  gap: 10px;
+}
+
+.clock-time-box {
+  height: 106px;
+  border: none;
+  border-radius: 5px;
+  background: #e5e5e5;
+  color: #18181b;
+  font-size: 4.8rem;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.clock-time-box.active {
+  background: #eadcff;
+  color: #5b00e8;
+}
+
+.clock-separator {
+  color: #18181b;
+  font-size: 4.6rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.clock-meridiem-stack {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid #a1a1aa;
+  border-radius: 5px;
+}
+
+.clock-meridiem-stack button {
+  height: 53px;
+  border: none;
+  border-bottom: 1px solid #d4d4d8;
+  background: #ffffff;
+  color: #52525b;
+  font-size: 1.25rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.clock-meridiem-stack button:last-child {
+  border-bottom: none;
+}
+
+.clock-meridiem-stack button.active {
+  background: #f3e8ff;
+  color: #5b00e8;
+}
+
+.clock-face {
+  position: relative;
+  width: 340px;
+  height: 340px;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #dedede;
+}
+
+.clock-face button {
+  position: absolute;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #18181b;
+  font-size: 1.25rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.clock-face button.active,
+.clock-face button:hover {
+  background: #5b00e8;
+  color: #ffffff;
+}
+
+.clock-hand {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 118px;
+  transform-origin: top center;
+  background: #5b00e8;
+}
+
+.clock-hand::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -5px;
+  width: 11px;
+  height: 11px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #5b00e8;
+}
+
+.clock-hand::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -25px;
+  width: 58px;
+  height: 58px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #5b00e8;
+}
+
+.clock-controls {
+  display: grid;
+  gap: 12px;
+}
+
+.minute-options,
+.clock-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.minute-options button,
+.clock-actions button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #5b00e8;
+  font-weight: 800;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.minute-options button.active,
+.minute-options button:hover {
+  background: #f3e8ff;
+  color: #5b00e8;
+}
+
+.clock-actions {
+  display: grid;
+  grid-template-columns: 42px 1fr auto auto;
+  align-items: center;
+  justify-content: initial;
+  margin-top: 4px;
+}
+
+.clock-actions .clock-keyboard {
+  justify-self: start;
+  color: #52525b;
+  font-size: 1.3rem;
+}
+
+.clock-actions button:last-child,
+.clock-actions button:nth-last-child(2) {
+  color: #5b00e8;
+  font-size: 1rem;
+}
+
+.branch-search {
+  min-width: 260px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  color: #64748b;
+}
+
+.branch-search input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font: inherit;
+}
+
+.branch-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.branch-table {
+  width: 100%;
+  min-width: 1100px;
+  border-collapse: collapse;
+}
+
+.branch-table th,
+.branch-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.branch-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.branch-table td {
+  color: #334155;
+  font-size: 0.9rem;
+}
+
+.branch-table td strong,
+.branch-table td span {
+  display: block;
+}
+
+.branch-table td span {
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.branch-status {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.branch-status.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.branch-status.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+@media (max-width: 1100px) {
+  .branch-stats,
+  .branch-field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .branch-header,
+  .branch-form-title,
+  .branch-list-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .branch-stats,
+  .branch-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .period-editor-header,
+  .period-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .period-day-row {
+    grid-template-columns: 1fr;
+  }
+
+  .branch-actions,
+  .branch-filters,
+  .branch-search {
+    width: 100%;
+  }
+}
