@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import api from '../services/api';
 import { Search, Plus, Edit2, Trash2, Eye, X, BarChart3, List, KanbanSquare, Users, ArrowDown, ArrowUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
@@ -44,6 +44,85 @@ export default function Enquiries() {
   const serviceTypes = ['Residential Survey', 'Commercial Survey', 'Industrial Survey', 'Property Valuation', 'Consultation'];
   const assignees = ['agent@example.com', 'user@example.com', 'admin@gmail.com'];
 
+  const demoNames = ['Shiva Kumar', 'Aditi Sharma', 'Karan Patel', 'Priya Singh', 'Ravi Verma', 'Sneha Joshi', 'Manish Gupta', 'Neha Reddy', 'Amit Shah', 'Sangeeta Rao'];
+  const demoStatuses = ['new', 'contacted', 'qualified', 'converted', 'lost'];
+  const demoPriorities = ['low', 'medium', 'high'];
+  const demoSources = ['Direct', 'Website', 'Referral', 'Phone', 'Social Media', 'Email'];
+  const demoServiceTypes = ['Residential Survey', 'Commercial Survey', 'Industrial Survey', 'Property Valuation', 'Consultation'];
+  const demoAssignees = ['agent@example.com', 'user@example.com', 'admin@gmail.com'];
+
+  const dummyEnquiries = useMemo(() => {
+    return Array.from({ length: 100 }, (_, idx) => {
+      const index = idx + 1;
+      const name = demoNames[idx % demoNames.length];
+      const [firstName] = name.split(' ');
+      const email = `${firstName.toLowerCase()}${index}@example.com`;
+      const phone = `9${String(700000000 + (idx * 1234567) % 300000000).padStart(9, '0')}`;
+      const serviceType = demoServiceTypes[idx % demoServiceTypes.length];
+      const source = demoSources[idx % demoSources.length];
+      const status = demoStatuses[idx % demoStatuses.length];
+      const priority = demoPriorities[idx % demoPriorities.length];
+      const assignedTo = demoAssignees[idx % demoAssignees.length];
+      const projectValue = 50000 + (idx % 15) * 75000;
+      const leadScore = 30 + (idx % 70);
+      const updatedAt = new Date(Date.now() - idx * 86400000).toISOString();
+
+      return {
+        id: `DUMMY-${1000 + idx}`,
+        customerName: name,
+        email,
+        phone,
+        serviceType,
+        source,
+        status,
+        priority,
+        assignedTo,
+        projectValue,
+        leadScore,
+        updatedAt,
+        notes: ['Imported enquiry for testing'],
+      };
+    });
+  }, []);
+
+  const filterDummyEnquiries = (entries) => {
+    return entries.filter((enquiry) => {
+      const searchValue = search.toLowerCase();
+      const matchesSearch = !search || [
+        enquiry.customerName,
+        enquiry.email,
+        enquiry.phone,
+        enquiry.serviceType,
+        enquiry.source,
+        enquiry.assignedTo,
+      ].some((field) => field?.toLowerCase().includes(searchValue));
+
+      return (
+        matchesSearch &&
+        (!statusFilter || enquiry.status === statusFilter) &&
+        (!priorityFilter || enquiry.priority === priorityFilter) &&
+        (!sourceFilter || enquiry.source === sourceFilter)
+      );
+    });
+  };
+
+  const sortDummyEnquiries = (entries) => {
+    return [...entries].sort((a, b) => {
+      const getValue = (item, field) => {
+        if (field === 'updatedAt') return new Date(item.updatedAt).getTime();
+        if (typeof item[field] === 'number') return item[field];
+        return String(item[field] || '').toLowerCase();
+      };
+
+      const valueA = getValue(a, sortBy);
+      const valueB = getValue(b, sortBy);
+
+      if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+      if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
+
   useEffect(() => {
     fetchDashboard();
   }, []);
@@ -64,7 +143,19 @@ export default function Enquiries() {
       setStats(res.data);
       setError(null);
     } catch (err) {
-      setError('Failed to load dashboard stats');
+      const demoStats = dummyEnquiries.reduce(
+        (acc, enquiry) => {
+          acc.total += 1;
+          acc.totalValue += enquiry.projectValue;
+          acc[enquiry.status] += 1;
+          if (enquiry.priority === 'high') acc.highPriority += 1;
+          return acc;
+        },
+        { total: 0, totalValue: 0, new: 0, contacted: 0, qualified: 0, converted: 0, lost: 0, highPriority: 0 }
+      );
+      demoStats.conversionRate = demoStats.total ? Math.round((demoStats.converted / demoStats.total) * 100) : 0;
+      setStats(demoStats);
+      setError(null);
     } finally {
       setLoading(false);
     }
@@ -72,6 +163,7 @@ export default function Enquiries() {
 
   const fetchEnquiries = async () => {
     try {
+      setLoading(true);
       const params = new URLSearchParams({ page, limit: rowsPerPage, sortBy, sortOrder });
       if (search) params.append('search', search);
       if (statusFilter) params.append('status', statusFilter);
@@ -83,7 +175,11 @@ export default function Enquiries() {
       setTotalResults(res.data.total);
       setError(null);
     } catch (err) {
-      setError('Failed to load enquiries');
+      const filtered = filterDummyEnquiries(dummyEnquiries);
+      const sorted = sortDummyEnquiries(filtered);
+      setEnquiries(sorted.slice((page - 1) * rowsPerPage, page * rowsPerPage));
+      setTotalResults(sorted.length);
+      setError(null);
     } finally {
       setLoading(false);
     }
@@ -101,7 +197,10 @@ export default function Enquiries() {
       setPipelineLeads(res.data.data);
       setError(null);
     } catch (err) {
-      setError('Failed to load lead pipeline');
+      const filtered = filterDummyEnquiries(dummyEnquiries);
+      const sorted = sortDummyEnquiries(filtered);
+      setPipelineLeads(sorted.slice(0, 100));
+      setError(null);
     } finally {
       setLoading(false);
     }
@@ -824,17 +923,17 @@ export default function Enquiries() {
                 <tbody>
                   {enquiries.map((enquiry, index) => (
                     <tr key={enquiry.id}>
-                      <td>{(page - 1) * rowsPerPage + index + 1}</td>
-                      <td>{enquiry.customerName}</td>
-                      <td>{enquiry.email}</td>
-                      <td>{enquiry.serviceType}</td>
-                      <td>₹{(enquiry.projectValue / 100000).toFixed(1)}L</td>
-                      <td><span className="status-badge" style={{ backgroundColor: getStatusColor(enquiry.status) }}>{enquiry.status}</span></td>
-                      <td><span className={`priority-badge priority-${enquiry.priority}`}>{enquiry.priority}</span></td>
-                      <td>{enquiry.assignedTo || 'Unassigned'}</td>
-                      <td>{enquiry.leadScore || 0}</td>
-                      <td>{formatDate(enquiry.updatedAt)}</td>
-                      <td className="actions">
+                      <td data-label="S.No">{(page - 1) * rowsPerPage + index + 1}</td>
+                      <td data-label="Name">{enquiry.customerName}</td>
+                      <td data-label="Contact">{enquiry.email}</td>
+                      <td data-label="Service">{enquiry.serviceType}</td>
+                      <td data-label="Value">₹{(enquiry.projectValue / 100000).toFixed(1)}L</td>
+                      <td data-label="Status"><span className="status-badge" style={{ backgroundColor: getStatusColor(enquiry.status) }}>{enquiry.status}</span></td>
+                      <td data-label="Priority"><span className={`priority-badge priority-${enquiry.priority}`}>{enquiry.priority}</span></td>
+                      <td data-label="Owner">{enquiry.assignedTo || 'Unassigned'}</td>
+                      <td data-label="Score">{enquiry.leadScore || 0}</td>
+                      <td data-label="Updated">{formatDate(enquiry.updatedAt)}</td>
+                      <td data-label="Actions" className="actions">
                         <button className="icon-btn view" onClick={() => fetchEnquiryDetail(enquiry.id)} title="View"><Eye size={16} /></button>
                         <button className="icon-btn edit" onClick={() => handleEdit(enquiry)} title="Edit"><Edit2 size={16} /></button>
                         <button className="icon-btn delete" onClick={() => handleDelete(enquiry.id)} title="Delete"><Trash2 size={16} /></button>
