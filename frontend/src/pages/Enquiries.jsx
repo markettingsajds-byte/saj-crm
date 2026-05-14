@@ -1,8 +1,48 @@
-import { useEffect, useMemo, useState } from 'react';
-import api from '../services/api';
+import { useEffect, useState } from 'react';
 import { Search, Plus, Edit2, Trash2, Eye, X, BarChart3, List, KanbanSquare, Users, ArrowDown, ArrowUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import '../styles/Enquiries.css';
+
+const demoNames = ['Shiva Kumar', 'Aditi Sharma', 'Karan Patel', 'Priya Singh', 'Ravi Verma', 'Sneha Joshi', 'Manish Gupta', 'Neha Reddy', 'Amit Shah', 'Sangeeta Rao'];
+const demoStatuses = ['new', 'contacted', 'qualified', 'converted', 'lost'];
+const demoPriorities = ['low', 'medium', 'high'];
+const demoSources = ['Direct', 'Website', 'Referral', 'Phone', 'Social Media', 'Email'];
+const demoServiceTypes = ['Residential Survey', 'Commercial Survey', 'Industrial Survey', 'Property Valuation', 'Consultation'];
+const demoAssignees = ['agent@example.com', 'user@example.com', 'admin@gmail.com'];
+
+const generateDummyEnquiries = () => {
+  return Array.from({ length: 100 }, (_, idx) => {
+    const index = idx + 1;
+    const name = demoNames[idx % demoNames.length];
+    const [firstName] = name.split(' ');
+    const email = `${firstName.toLowerCase()}${index}@example.com`;
+    const phone = `9${String(700000000 + (idx * 1234567) % 300000000).padStart(9, '0')}`;
+    const serviceType = demoServiceTypes[idx % demoServiceTypes.length];
+    const source = demoSources[idx % demoSources.length];
+    const status = demoStatuses[idx % demoStatuses.length];
+    const priority = demoPriorities[idx % demoPriorities.length];
+    const assignedTo = demoAssignees[idx % demoAssignees.length];
+    const projectValue = 50000 + (idx % 15) * 75000;
+    const leadScore = 30 + (idx % 70);
+    const updatedAt = new Date(Date.now() - idx * 86400000).toISOString();
+
+    return {
+      id: `DUMMY-${1000 + idx}`,
+      customerName: name,
+      email,
+      phone,
+      serviceType,
+      source,
+      status,
+      priority,
+      assignedTo,
+      projectValue,
+      leadScore,
+      updatedAt,
+      notes: ['Imported enquiry for testing'],
+    };
+  });
+};
 
 export default function Enquiries() {
   const [view, setView] = useState('dashboard');
@@ -44,46 +84,8 @@ export default function Enquiries() {
   const serviceTypes = ['Residential Survey', 'Commercial Survey', 'Industrial Survey', 'Property Valuation', 'Consultation'];
   const assignees = ['agent@example.com', 'user@example.com', 'admin@gmail.com'];
 
-  const demoNames = ['Shiva Kumar', 'Aditi Sharma', 'Karan Patel', 'Priya Singh', 'Ravi Verma', 'Sneha Joshi', 'Manish Gupta', 'Neha Reddy', 'Amit Shah', 'Sangeeta Rao'];
-  const demoStatuses = ['new', 'contacted', 'qualified', 'converted', 'lost'];
-  const demoPriorities = ['low', 'medium', 'high'];
-  const demoSources = ['Direct', 'Website', 'Referral', 'Phone', 'Social Media', 'Email'];
-  const demoServiceTypes = ['Residential Survey', 'Commercial Survey', 'Industrial Survey', 'Property Valuation', 'Consultation'];
-  const demoAssignees = ['agent@example.com', 'user@example.com', 'admin@gmail.com'];
-
-  const dummyEnquiries = useMemo(() => {
-    return Array.from({ length: 100 }, (_, idx) => {
-      const index = idx + 1;
-      const name = demoNames[idx % demoNames.length];
-      const [firstName] = name.split(' ');
-      const email = `${firstName.toLowerCase()}${index}@example.com`;
-      const phone = `9${String(700000000 + (idx * 1234567) % 300000000).padStart(9, '0')}`;
-      const serviceType = demoServiceTypes[idx % demoServiceTypes.length];
-      const source = demoSources[idx % demoSources.length];
-      const status = demoStatuses[idx % demoStatuses.length];
-      const priority = demoPriorities[idx % demoPriorities.length];
-      const assignedTo = demoAssignees[idx % demoAssignees.length];
-      const projectValue = 50000 + (idx % 15) * 75000;
-      const leadScore = 30 + (idx % 70);
-      const updatedAt = new Date(Date.now() - idx * 86400000).toISOString();
-
-      return {
-        id: `DUMMY-${1000 + idx}`,
-        customerName: name,
-        email,
-        phone,
-        serviceType,
-        source,
-        status,
-        priority,
-        assignedTo,
-        projectValue,
-        leadScore,
-        updatedAt,
-        notes: ['Imported enquiry for testing'],
-      };
-    });
-  }, []);
+  const isSampleOnly = true;
+  const [dummyEnquiries, setDummyEnquiries] = useState(generateDummyEnquiries);
 
   const filterDummyEnquiries = (entries) => {
     return entries.filter((enquiry) => {
@@ -136,107 +138,75 @@ export default function Enquiries() {
     }
   }, [search, statusFilter, priorityFilter, sourceFilter, sortBy, sortOrder, page, view]);
 
-  const fetchDashboard = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get('/enquiries/stats');
-      setStats(res.data);
-      setError(null);
-    } catch (err) {
-      const demoStats = dummyEnquiries.reduce(
-        (acc, enquiry) => {
-          acc.total += 1;
-          acc.totalValue += enquiry.projectValue;
-          acc[enquiry.status] += 1;
-          if (enquiry.priority === 'high') acc.highPriority += 1;
-          return acc;
-        },
-        { total: 0, totalValue: 0, new: 0, contacted: 0, qualified: 0, converted: 0, lost: 0, highPriority: 0 }
-      );
-      demoStats.conversionRate = demoStats.total ? Math.round((demoStats.converted / demoStats.total) * 100) : 0;
-      setStats(demoStats);
-      setError(null);
-    } finally {
-      setLoading(false);
-    }
+  const fetchDashboard = () => {
+    setLoading(true);
+    const demoStats = dummyEnquiries.reduce(
+      (acc, enquiry) => {
+        acc.total += 1;
+        acc.totalValue += enquiry.projectValue || 0;
+        acc[enquiry.status] += 1;
+        if (enquiry.priority === 'high') acc.highPriority += 1;
+        return acc;
+      },
+      { total: 0, totalValue: 0, new: 0, contacted: 0, qualified: 0, converted: 0, lost: 0, highPriority: 0 }
+    );
+    demoStats.conversionRate = demoStats.total ? Math.round((demoStats.converted / demoStats.total) * 100) : 0;
+    setStats(demoStats);
+    setError(null);
+    setLoading(false);
   };
 
-  const fetchEnquiries = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({ page, limit: rowsPerPage, sortBy, sortOrder });
-      if (search) params.append('search', search);
-      if (statusFilter) params.append('status', statusFilter);
-      if (priorityFilter) params.append('priority', priorityFilter);
-      if (sourceFilter) params.append('source', sourceFilter);
-
-      const res = await api.get(`/enquiries?${params.toString()}`);
-      setEnquiries(res.data.data);
-      setTotalResults(res.data.total);
-      setError(null);
-    } catch (err) {
-      const filtered = filterDummyEnquiries(dummyEnquiries);
-      const sorted = sortDummyEnquiries(filtered);
-      setEnquiries(sorted.slice((page - 1) * rowsPerPage, page * rowsPerPage));
-      setTotalResults(sorted.length);
-      setError(null);
-    } finally {
-      setLoading(false);
-    }
+  const fetchEnquiries = () => {
+    setLoading(true);
+    const filtered = filterDummyEnquiries(dummyEnquiries);
+    const sorted = sortDummyEnquiries(filtered);
+    setEnquiries(sorted.slice((page - 1) * rowsPerPage, page * rowsPerPage));
+    setTotalResults(sorted.length);
+    setError(null);
+    setLoading(false);
   };
 
-  const fetchPipeline = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams({ page: 1, limit: 100, sortBy, sortOrder });
-      if (search) params.append('search', search);
-      if (priorityFilter) params.append('priority', priorityFilter);
-      if (sourceFilter) params.append('source', sourceFilter);
-
-      const res = await api.get(`/enquiries?${params.toString()}`);
-      setPipelineLeads(res.data.data);
-      setError(null);
-    } catch (err) {
-      const filtered = filterDummyEnquiries(dummyEnquiries);
-      const sorted = sortDummyEnquiries(filtered);
-      setPipelineLeads(sorted.slice(0, 100));
-      setError(null);
-    } finally {
-      setLoading(false);
-    }
+  const fetchPipeline = () => {
+    setLoading(true);
+    const filtered = filterDummyEnquiries(dummyEnquiries);
+    const sorted = sortDummyEnquiries(filtered);
+    setPipelineLeads(sorted.slice(0, 100));
+    setError(null);
+    setLoading(false);
   };
 
-  const fetchEnquiryDetail = async (id) => {
-    try {
-      const res = await api.get(`/enquiries/${id}`);
-      setSelectedEnquiry(res.data);
-    } catch (err) {
-      alert('Failed to load enquiry');
+  const fetchEnquiryDetail = (id) => {
+    const enquiry = dummyEnquiries.find((item) => item.id === id);
+    if (!enquiry) {
+      alert('Enquiry not found');
+      return;
     }
+    setSelectedEnquiry(enquiry);
   };
 
-  const handleAddNote = async (e) => {
+  const handleAddNote = (e) => {
     e.preventDefault();
     if (!newNote.trim() || !selectedEnquiry) return;
 
-    try {
-      await api.post(`/enquiries/${selectedEnquiry.id}/notes`, { text: newNote });
-      setNewNote('');
-      fetchEnquiryDetail(selectedEnquiry.id);
-    } catch (err) {
-      alert('Failed to add note');
-    }
+    const updated = {
+      ...selectedEnquiry,
+      notes: [...(selectedEnquiry.notes || []), newNote.trim()],
+    };
+    setNewNote('');
+    setSelectedEnquiry(updated);
+    setDummyEnquiries((prev) => prev.map((item) => (item.id === updated.id ? updated : item)));
   };
 
-  const handleStatusChange = async (newStatus) => {
+  const handleStatusChange = (newStatus) => {
     if (!selectedEnquiry) return;
-    try {
-      await api.patch(`/enquiries/${selectedEnquiry.id}/status`, { status: newStatus });
-      fetchEnquiryDetail(selectedEnquiry.id);
-      fetchDashboard();
-    } catch (err) {
-      alert('Failed to update status');
-    }
+    const updated = {
+      ...selectedEnquiry,
+      status: newStatus,
+      updatedAt: new Date().toISOString(),
+    };
+    setSelectedEnquiry(updated);
+    setDummyEnquiries((prev) => prev.map((item) => (item.id === updated.id ? updated : item)));
+    fetchDashboard();
   };
 
   const handleFormChange = (e) => {
@@ -244,46 +214,57 @@ export default function Enquiries() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    try {
-      if (editingId) {
-        await api.put(`/enquiries/${editingId}`, formData);
-        setEditingId(null);
-        fetchEnquiryDetail(editingId);
-      } else {
-        await api.post('/enquiries', formData);
-      }
-      setShowForm(false);
-      setFormData({
-        customerName: '',
-        email: '',
-        phone: '',
-        serviceType: '',
-        projectValue: '',
-        status: 'new',
-        priority: 'medium',
-        source: 'Direct',
-        assignedTo: 'agent@example.com',
-        leadScore: 50,
-        description: '',
-      });
-      fetchDashboard();
-      fetchEnquiries();
-    } catch (err) {
-      alert('Failed to save enquiry');
+
+    const updatedData = {
+      ...formData,
+      projectValue: Number(formData.projectValue) || 0,
+      leadScore: Number(formData.leadScore) || 0,
+      updatedAt: new Date().toISOString(),
+      notes: formData.notes || ['Imported enquiry for testing'],
+    };
+
+    if (editingId) {
+      const updated = { ...updatedData, id: editingId };
+      setDummyEnquiries((prev) => prev.map((item) => (item.id === editingId ? updated : item)));
+      setEditingId(null);
+      setSelectedEnquiry(updated);
+    } else {
+      const newEntry = {
+        ...updatedData,
+        id: `DUMMY-${Date.now()}`,
+      };
+      setDummyEnquiries((prev) => [newEntry, ...prev]);
+      setSelectedEnquiry(newEntry);
     }
+
+    setShowForm(false);
+    setFormData({
+      customerName: '',
+      email: '',
+      phone: '',
+      serviceType: '',
+      projectValue: '',
+      status: 'new',
+      priority: 'medium',
+      source: 'Direct',
+      assignedTo: 'agent@example.com',
+      leadScore: 50,
+      description: '',
+    });
+    fetchDashboard();
+    fetchEnquiries();
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = (id) => {
     if (window.confirm('Delete this enquiry?')) {
-      try {
-        await api.delete(`/enquiries/${id}`);
-        fetchEnquiries();
-        fetchDashboard();
-      } catch (err) {
-        alert('Failed to delete');
+      setDummyEnquiries((prev) => prev.filter((item) => item.id !== id));
+      if (selectedEnquiry?.id === id) {
+        setSelectedEnquiry(null);
       }
+      fetchEnquiries();
+      fetchDashboard();
     }
   };
 
