@@ -13,12 +13,17 @@ import AttendancePunching from './pages/AttendancePunching';
 import AttendanceManagement from './pages/AttendanceManagement';
 import LeaveManagement from './pages/LeaveManagement';
 import PayrollCalculations from './pages/PayrollCalculations';
+import Login from './pages/Login';
+import OTPLogin from './pages/OTPLogin';
 import './App.css';
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/otp" element={<OTPLogin />} />
+
         <Route element={<RequireAuth />}>
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
@@ -34,7 +39,7 @@ function App() {
             <Route path="/attendance/leave-manage" element={<LeaveManagement />} />
             <Route path="/attendance/payroll" element={<PayrollCalculations />} />
             <Route path="/rbac-access" element={<RBACAccess />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
           </Route>
         </Route>
       </Routes>
