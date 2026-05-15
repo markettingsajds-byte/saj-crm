@@ -895,22 +895,3 @@
     flex-wrap: wrap;
   }
 }
-
-  .detail-body {
-    grid-template-columns: 1fr;
-  }
-
-  .unified-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .header-actions {
-    width: 100%;
-  }
-
-  .btn-primary {
-    flex: 1;
-  }
-}
