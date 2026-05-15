@@ -319,3 +319,101 @@
   font-size: 1.1rem;
 }
 
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.project-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.project-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.project-card h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #111827;
+}
+
+.project-status {
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white;
+}
+
+.status-in-progress {
+  background: #2563eb;
+}
+
+.status-planning {
+  background: #6366f1;
+}
+
+.status-completed {
+  background: #16a34a;
+}
+
+.status-on-hold {
+  background: #f59e0b;
+}
+
+.project-client {
+  margin: 0 0 1rem;
+  color: #4b5563;
+}
+
+.project-meta-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.project-meta-item span {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 0.35rem;
+}
+
+.project-meta-item strong {
+  display: block;
+  color: #111827;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
