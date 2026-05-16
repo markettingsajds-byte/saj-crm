@@ -18,6 +18,8 @@ const navItems = [
       { name: 'Customer Master', href: '/customers' },
       { name: 'Employee Master', href: '/master/employees' },
       { name: 'Designation Master', href: '/master/designations' },
+      { name: 'Form Template', href: '/form-template' },
+      { name: 'Notification Template', href: '/notification-template' },
     ]
   },
   { name: 'Flow Templates', icon: GitBranch, href: '/flow-templates' },
