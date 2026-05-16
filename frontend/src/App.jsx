@@ -11,6 +11,7 @@ import BranchMaster from './pages/BranchMaster';
 import DepartmentMaster from './pages/DepartmentMaster';
 import EmployeeMaster from './pages/EmployeeMaster';
 import DesignationMaster from './pages/DesignationMaster';
+import VehicleMaintenanceMaster from './pages/VehicleMaintenanceMaster';
 import FlowTemplates from './pages/FlowTemplates';
 import Payments from './pages/Payments';
 import LeaveRequests from './pages/LeaveRequests';
@@ -50,6 +51,7 @@ function App() {
             <Route path="/master/departments" element={<DepartmentMaster />} />
             <Route path="/master/employees" element={<EmployeeMaster />} />
             <Route path="/master/designations" element={<DesignationMaster />} />
+            <Route path="/master/vehicle-maintenance" element={<VehicleMaintenanceMaster />} />
             <Route path="/flow-templates" element={<FlowTemplates />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/leaves" element={<LeaveRequests />} />
