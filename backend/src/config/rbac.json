@@ -1,0 +1,33 @@
+{
+  "roles": {
+    "superadmin": {
+      "label": "Super Admin",
+      "scope": "all",
+      "modules": [
+        "*"
+      ]
+    },
+    "admin": {
+      "label": "Admin",
+      "scope": "all",
+      "modules": [
+        "*"
+      ]
+    },
+    "agent": {
+      "label": "Agent",
+      "scope": "branch",
+      "modules": []
+    },
+    "user": {
+      "label": "User",
+      "scope": "branch",
+      "modules": []
+    }
+  },
+  "branches": [
+    "Head Office",
+    "Chennai Site Office",
+    "Madurai Site Office"
+  ]
+}

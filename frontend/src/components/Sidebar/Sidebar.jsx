@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard, Settings, GitBranch, MessageSquare,
   FolderKanban, ListChecks, CreditCard, CalendarCheck,
-  Clock, ChevronDown, LogOut, ShieldCheck
+  CalendarDays, Clock, ChevronDown, LogOut, ShieldCheck
 } from 'lucide-react';
 import './Sidebar.css';
 
@@ -24,7 +24,8 @@ const navItems = [
     ]
   },
   { name: 'Flow Templates', icon: GitBranch, href: '/flow-templates' },
-  { name: 'Enquires', icon: MessageSquare, href: '/enquiries' },
+  { name: 'Enquiries', icon: MessageSquare, href: '/enquiries' },
+  { name: 'Followups', icon: CalendarDays, href: '/followups' },
   { name: 'Projects', icon: FolderKanban, href: '/projects' },
   { name: 'My Tasks', icon: ListChecks, href: '/tasks' },
   { name: 'Payments', icon: CreditCard, href: '/payments' },

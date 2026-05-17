@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const authMiddleware = require('../middleware/auth');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'saj_crm_secret';
 
@@ -38,6 +39,43 @@ const users = [
     password: bcrypt.hashSync('agent123', 10),
   },
 ];
+
+// Simple RBAC config persistence
+const fs = require('fs');
+const path = require('path');
+const rbacFile = path.join(__dirname, '..', 'config', 'rbac.json');
+
+function loadRbac() {
+  try {
+    if (fs.existsSync(rbacFile)) {
+      const raw = fs.readFileSync(rbacFile, 'utf8');
+      return JSON.parse(raw);
+    }
+  } catch (e) {
+    console.error('Failed to load rbac', e);
+  }
+  return {
+    roles: {
+      superadmin: { label: 'Super Admin', scope: 'all', modules: ['*'] },
+      admin: { label: 'Admin', scope: 'all', modules: ['*'] },
+      agent: { label: 'Agent', scope: 'branch', modules: [] },
+      user: { label: 'User', scope: 'branch', modules: [] },
+    },
+    branches: ['Head Office','Chennai Site Office','Madurai Site Office'],
+  };
+}
+
+function saveRbac(conf) {
+  try {
+    fs.writeFileSync(rbacFile, JSON.stringify(conf, null, 2), 'utf8');
+    return true;
+  } catch (e) {
+    console.error('Failed to save rbac', e);
+    return false;
+  }
+}
+
+let RBAC_CONF = loadRbac();
 
 const otpStore = {};
 
@@ -115,6 +153,54 @@ router.post('/otp/verify', (req, res) => {
 
   delete otpStore[identifier];
   return res.json({ token: generateToken(user), user: sanitizeUser(user) });
+});
+
+// RBAC endpoints
+router.get('/rbac', (req, res) => {
+  res.json(RBAC_CONF);
+});
+
+router.post('/rbac', authMiddleware, (req, res) => {
+  if (!['admin', 'superadmin'].includes(req.user.role)) {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
+
+  const conf = req.body;
+  if (!conf || typeof conf !== 'object') return res.status(400).json({ message: 'Invalid payload' });
+  RBAC_CONF = conf;
+  const ok = saveRbac(RBAC_CONF);
+  if (!ok) return res.status(500).json({ message: 'Failed to persist RBAC' });
+  return res.json({ message: 'RBAC saved' });
+});
+
+router.get('/me', authMiddleware, (req, res) => {
+  const user = users.find((item) => item.id === req.user.id);
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  res.json(sanitizeUser(user));
+});
+
+router.get('/users', authMiddleware, (req, res) => {
+  if (!['admin', 'superadmin'].includes(req.user.role)) {
+    return res.status(403).json({ message: 'Forbidden' });
+  }
+
+  res.json(users.map(sanitizeUser));
+});
+
+router.get('/users/:id', authMiddleware, (req, res) => {
+  const user = users.find((item) => item.id === Number(req.params.id));
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  res.json(sanitizeUser(user));
+});
+
+// Assign role to user (in-memory)
+router.put('/users/:id/role', authMiddleware, (req, res) => {
+  const id = Number(req.params.id);
+  const { role } = req.body;
+  const user = users.find(u => u.id === id);
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  user.role = role;
+  return res.json({ message: 'Role updated', user: sanitizeUser(user) });
 });
 
 module.exports = router;

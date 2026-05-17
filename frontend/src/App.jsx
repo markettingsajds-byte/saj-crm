@@ -1,5 +1,6 @@
 import { Navigate, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import AppLayout from './components/AppLayout';
 import RequireAuth from './components/RequireAuth';
 import Dashboard from './pages/Dashboard';
@@ -23,13 +24,15 @@ import AttendancePunching from './pages/AttendancePunching';
 import AttendanceManagement from './pages/AttendanceManagement';
 import LeaveManagement from './pages/LeaveManagement';
 import PayrollCalculations from './pages/PayrollCalculations';
+import Followups from './pages/Followups';
 import Login from './pages/Login';
 import OTPLogin from './pages/OTPLogin';
 import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/otp" element={<OTPLogin />} />
@@ -38,6 +41,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/enquiries" element={<Enquiries />} />
+            <Route path="/followups" element={<Followups />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/tasks" element={<Tasks />} />
@@ -63,7 +67,8 @@ function App() {
           </Route>
         </Route>
       </Routes>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

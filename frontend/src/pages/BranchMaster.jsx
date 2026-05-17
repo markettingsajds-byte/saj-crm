@@ -277,7 +277,14 @@ export default function BranchMaster() {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [timePicker, setTimePicker] = useState(null);
+
+  const closeModal = () => {
+    setIsAddModalOpen(false);
+    setFormData(emptyBranch);
+    setTimePicker(null);
+  };
 
   const filteredBranches = useMemo(() => {
     const query = search.toLowerCase();
@@ -315,16 +322,38 @@ export default function BranchMaster() {
   };
 
   const openTimePicker = (day, index, key, value) => {
-    const [time = '09:00', meridiem = 'AM'] = value.split(' ');
-    const [hour = '09', minute = '00'] = time.split(':');
+    const safeValue = String(value || '09:00 AM').trim();
+    const [timePart = '09:00', meridiem = 'AM'] = safeValue.split(' ');
+    const [hourRaw = '09', minuteRaw = '00'] = timePart.split(':');
+    const hour = String(Number(hourRaw) || 12).padStart(2, '0');
+    const minute = String(minuteRaw || '00').padStart(2, '0');
     setTimePicker({
       day,
       index,
       key,
-      hour: String(Number(hour) || 12),
+      hour,
       minute,
       meridiem,
+      mode: 'hour',
     });
+  };
+
+  const getClockFaceValues = () => {
+    if (!timePicker) return [];
+    if (timePicker.mode === 'minute') {
+      return Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
+    }
+    return [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  };
+
+  const getClockHandRotation = () => {
+    if (!timePicker) return 180;
+    if (timePicker.mode === 'minute') {
+      const minute = Number(timePicker.minute) || 0;
+      return ((minute / 5) % 12) * 30 + 180;
+    }
+    const hour = Number(timePicker.hour) % 12;
+    return hour * 30 + 180;
   };
 
   const applyTimePicker = () => {
@@ -377,6 +406,7 @@ export default function BranchMaster() {
     const schedule = buildWorkingSchedule(formData.workingPeriods);
     setBranches((current) => [{ ...formData, ...schedule }, ...current]);
     setFormData(emptyBranch);
+    closeModal();
   };
 
   return (
@@ -387,6 +417,7 @@ export default function BranchMaster() {
           <h1>Branch Master</h1>
         </div>
         <div className="branch-actions">
+          <button className="branch-add-btn" type="button" onClick={() => setIsAddModalOpen(true)}><Plus size={17} /> Add Branch</button>
           <button className="branch-tool-btn" type="button"><Download size={17} /> Export Excel</button>
           <button className="branch-tool-btn" type="button"><FileText size={17} /> Export PDF</button>
           <button className="branch-tool-btn" type="button"><QrCode size={17} /> QR Code</button>
@@ -400,163 +431,171 @@ export default function BranchMaster() {
         <div className="branch-stat"><Building2 size={22} /><strong>{totalStations}</strong><span>Total Stations</span></div>
       </div>
 
-      <form className="branch-form" onSubmit={handleSubmit}>
-        <div className="branch-form-title">
-          <h2>Create Branch</h2>
-          <button className="branch-submit" type="submit"><Plus size={17} /> Save Branch</button>
-        </div>
-
-        {fieldSections.map((section) => (
-          <section className="branch-form-section" key={section.title}>
-            <h3>{section.title}</h3>
-            <div className="branch-field-grid">
-              {section.fields.map(([name, label, type = 'text', options]) => (
-                <label key={name}>
-                  <span>{label}</span>
-                  {type === 'select' ? (
-                    <select name={name} value={formData[name]} onChange={handleChange}>
-                      {options.map((option) => <option key={option} value={option}>{option}</option>)}
-                    </select>
-                  ) : (
-                    <input name={name} type={type} value={formData[name]} onChange={handleChange} />
-                  )}
-                </label>
-              ))}
+      {isAddModalOpen && (
+        <div className="branch-add-panel">
+          <div className="branch-add-panel-header">
+            <div>
+              <p className="branch-kicker">Master Setup</p>
+              <h2>Add New Branch</h2>
             </div>
-            {section.title === 'Operational Details' && (
-              <div className="period-editor">
-                <div className="period-editor-header">
-                  <div>
-                    <strong>Edit periods</strong>
-                    <span>Time zone: India Standard Time (UTC+05:30)</span>
-                  </div>
-                </div>
-                <div className="period-week-tabs">
-                  {Object.keys(formData.workingPeriods).map((day) => (
-                    <span key={day} className={formData.workingPeriods[day].length ? 'active' : ''}>
-                      {day.slice(0, 1)}
-                    </span>
-                  ))}
-                </div>
-                <div className="period-day-list">
-                  {Object.entries(formData.workingPeriods).map(([day, periods]) => (
-                    <div className="period-day-row" key={day}>
-                      <div className="period-day-name">{day}</div>
-                      <div className="period-ranges">
-                        {periods.length === 0 ? (
-                          <span className="period-closed">Closed</span>
-                        ) : (
-                          periods.map((period, index) => (
-                            <div className="period-range" key={`${day}-${index}`}>
-                              <input
-                                type="text"
-                                value={period.start}
-                                onClick={() => openTimePicker(day, index, 'start', period.start)}
-                                onChange={(event) => handlePeriodChange(day, index, 'start', event.target.value)}
-                                placeholder="09:00 AM"
-                              />
-                              <span>-</span>
-                              <input
-                                type="text"
-                                value={period.end}
-                                onClick={() => openTimePicker(day, index, 'end', period.end)}
-                                onChange={(event) => handlePeriodChange(day, index, 'end', event.target.value)}
-                                placeholder="06:00 PM"
-                              />
-                              <button type="button" className="period-icon-btn" onClick={() => removePeriod(day, index)} title="Remove period">
-                                <MinusCircle size={16} />
-                              </button>
-                            </div>
-                          ))
-                        )}
-                      </div>
-                      <button type="button" className="period-icon-btn add" onClick={() => addPeriod(day)} title="Add period">
-                        <PlusCircle size={17} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                <div className="period-footer">
-                  <span>{buildWorkingSchedule(formData.workingPeriods).workingDays || 'No working days selected'}</span>
-                </div>
-                {timePicker && (
-                  <div className="clock-popover">
-                    <div className="clock-title">Select Time</div>
-                    <div className="clock-display">
-                      <button
-                        type="button"
-                        className="clock-time-box active"
-                        onClick={() => setTimePicker((current) => ({ ...current, mode: 'hour' }))}
-                      >
-                        {timePicker.hour}
-                      </button>
-                      <span className="clock-separator">:</span>
-                      <button
-                        type="button"
-                        className="clock-time-box"
-                        onClick={() => setTimePicker((current) => ({ ...current, mode: 'minute' }))}
-                      >
-                        {timePicker.minute}
-                      </button>
-                      <div className="clock-meridiem-stack">
-                        {['AM', 'PM'].map((meridiem) => (
-                          <button
-                            key={meridiem}
-                            type="button"
-                            className={timePicker.meridiem === meridiem ? 'active' : ''}
-                            onClick={() => setTimePicker((current) => ({ ...current, meridiem }))}
-                          >
-                            {meridiem}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="clock-face">
-                      {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((hour, index) => (
-                        <button
-                          key={hour}
-                          type="button"
-                          className={String(hour) === String(timePicker.hour) ? 'active' : ''}
-                          style={{
-                            transform: `rotate(${index * 30}deg) translate(0, -132px) rotate(-${index * 30}deg)`,
-                          }}
-                          onClick={() => setTimePicker((current) => ({ ...current, hour: String(hour) }))}
-                        >
-                          {hour}
-                        </button>
-                      ))}
-                      <div
-                        className="clock-hand"
-                        style={{ transform: `rotate(${(([12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].indexOf(Number(timePicker.hour)) || 0) * 30) + 180}deg)` }}
-                      ></div>
-                    </div>
-                    <div className="clock-controls">
-                      <div className="minute-options">
-                        {['00', '15', '30', '45'].map((minute) => (
-                          <button
-                            key={minute}
-                            type="button"
-                            className={timePicker.minute === minute ? 'active' : ''}
-                            onClick={() => setTimePicker((current) => ({ ...current, minute }))}
-                          >
-                            :{minute}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="clock-actions">
-                        <button type="button" className="clock-keyboard">▦</button>
-                        <span></span>
-                        <button type="button" onClick={() => setTimePicker(null)}>Cancel</button>
-                        <button type="button" onClick={applyTimePicker}>OK</button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+            <button type="button" className="branch-modal-close" onClick={closeModal}>Cancel</button>
+          </div>
+          <form className="branch-form" onSubmit={handleSubmit}>
+              <div className="branch-form-title">
+                <h2>Branch Details</h2>
+                <button className="branch-submit" type="submit"><Plus size={17} /> Save Branch</button>
               </div>
-            )}
-          </section>
-        ))}
-      </form>
+
+              {fieldSections.map((section) => (
+                <section className="branch-form-section" key={section.title}>
+                  <h3>{section.title}</h3>
+                  <div className="branch-field-grid">
+                    {section.fields.map(([name, label, type = 'text', options]) => (
+                      <label key={name}>
+                        <span>{label}</span>
+                        {type === 'select' ? (
+                          <select name={name} value={formData[name]} onChange={handleChange}>
+                            {options.map((option) => <option key={option} value={option}>{option}</option>)}
+                          </select>
+                        ) : (
+                          <input name={name} type={type} value={formData[name]} onChange={handleChange} />
+                        )}
+                      </label>
+                    ))}
+                  </div>
+                  {section.title === 'Operational Details' && (
+                    <div className="period-editor">
+                      <div className="period-editor-header">
+                        <div>
+                          <strong>Edit periods</strong>
+                          <span>Time zone: India Standard Time (UTC+05:30)</span>
+                        </div>
+                      </div>
+                      <div className="period-week-tabs">
+                        {Object.keys(formData.workingPeriods).map((day) => (
+                          <span key={day} className={formData.workingPeriods[day].length ? 'active' : ''}>
+                            {day.slice(0, 1)}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="period-day-list">
+                        {Object.entries(formData.workingPeriods).map(([day, periods]) => (
+                          <div className="period-day-row" key={day}>
+                            <div className="period-day-name">{day}</div>
+                            <div className="period-ranges">
+                              {periods.length === 0 ? (
+                                <span className="period-closed">Closed</span>
+                              ) : (
+                                periods.map((period, index) => (
+                                  <div className="period-range" key={`${day}-${index}`}>
+                                    <input
+                                      type="text"
+                                      value={period.start}
+                                      onClick={() => openTimePicker(day, index, 'start', period.start)}
+                                      onChange={(event) => handlePeriodChange(day, index, 'start', event.target.value)}
+                                      placeholder="09:00 AM"
+                                    />
+                                    <span>-</span>
+                                    <input
+                                      type="text"
+                                      value={period.end}
+                                      onClick={() => openTimePicker(day, index, 'end', period.end)}
+                                      onChange={(event) => handlePeriodChange(day, index, 'end', event.target.value)}
+                                      placeholder="06:00 PM"
+                                    />
+                                    <button type="button" className="period-icon-btn" onClick={() => removePeriod(day, index)} title="Remove period">
+                                      <MinusCircle size={16} />
+                                    </button>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+                            <button type="button" className="period-icon-btn add" onClick={() => addPeriod(day)} title="Add period">
+                              <PlusCircle size={17} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="period-footer">
+                        <span>{buildWorkingSchedule(formData.workingPeriods).workingDays || 'No working days selected'}</span>
+                      </div>
+                      {timePicker && (
+                        <div className="clock-popover">
+                          <div className="clock-title">Select Time</div>
+                          <div className="clock-display">
+                            <button
+                              type="button"
+                              className={`clock-time-box ${timePicker.mode === 'hour' ? 'active' : ''}`}
+                              onClick={() => setTimePicker((current) => ({ ...current, mode: 'hour' }))}
+                            >
+                              {timePicker.hour}
+                            </button>
+                            <span className="clock-separator">:</span>
+                            <button
+                              type="button"
+                              className={`clock-time-box ${timePicker.mode === 'minute' ? 'active' : ''}`}
+                              onClick={() => setTimePicker((current) => ({ ...current, mode: 'minute' }))}
+                            >
+                              {timePicker.minute}
+                            </button>
+                            <div className="clock-meridiem-stack">
+                              {['AM', 'PM'].map((meridiem) => (
+                                <button
+                                  key={meridiem}
+                                  type="button"
+                                  className={timePicker.meridiem === meridiem ? 'active' : ''}
+                                  onClick={() => setTimePicker((current) => ({ ...current, meridiem }))}
+                                >
+                                  {meridiem}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="clock-face">
+                            {getClockFaceValues().map((label, index) => (
+                              <button
+                                key={label}
+                                type="button"
+                                className={String(timePicker[timePicker.mode]) === String(label) ? 'active' : ''}
+                                style={{
+                                  transform: `rotate(${index * 30}deg) translate(0, -132px) rotate(-${index * 30}deg)`,
+                                }}
+                                onClick={() => setTimePicker((current) => ({ ...current, [current.mode]: String(label) }))}
+                              >
+                                {label}
+                              </button>
+                            ))}
+                            <div className="clock-hand" style={{ transform: `rotate(${getClockHandRotation()}deg)` }}></div>
+                          </div>
+                          <div className="clock-controls">
+                            <div className="minute-options">
+                              {['00', '15', '30', '45'].map((minute) => (
+                                <button
+                                  key={minute}
+                                  type="button"
+                                  className={timePicker.minute === minute ? 'active' : ''}
+                                  onClick={() => setTimePicker((current) => ({ ...current, minute }))}
+                                >
+                                  :{minute}
+                                </button>
+                              ))}
+                            </div>
+                            <div className="clock-actions">
+                              <button type="button" className="clock-keyboard">▦</button>
+                              <span></span>
+                              <button type="button" onClick={() => setTimePicker(null)}>Cancel</button>
+                              <button type="button" onClick={applyTimePicker}>OK</button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </section>
+              ))}
+            </form>
+          </div>
+      )}
 
       <section className="branch-list-section">
         <div className="branch-list-header">

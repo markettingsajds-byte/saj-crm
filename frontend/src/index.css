@@ -4,8 +4,44 @@ html, body, #root {
   min-height: 100%;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: #f8fafc;
+  color: #0f172a;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Dark mode overrides (applies when <html> has class 'dark') */
+.dark html, .dark body, .dark #root {
+  background: #0b1220;
+  color: #e6eef8;
+}
+
+.dark .sidebar { background: #071029; border-right-color: #112233; }
+.dark .topbar { background: #071029; border-bottom-color: #16202b; }
+.dark .page-container { background-color: #07101a; }
+.dark .page-content { background: #081424; box-shadow: none; color: #e6eef8; }
+.dark .dashboard-card, .dark .dashboard-section { background: #071021; border-color: #132033; }
+.dark .sidebar-link, .dark .sidebar-toggle, .dark .sidebar-sublink { color: #c9e6ff; }
+.dark .sidebar-link:hover, .dark .sidebar-toggle:hover, .dark .sidebar-sublink:hover {
+  background: rgba(255,255,255,0.015);
+  color: #a6e3ff;
+}
+.dark .sidebar-toggle.open {
+  background: rgba(255,255,255,0.02);
+  color: #c8f0ff;
+}
+.dark .sidebar-link.active, .dark .sidebar-sublink.active {
+  background: rgba(30,144,255,0.06);
+  color: #9fe9ff;
+  border-left-color: #2db7ff;
+}
+.dark .topbar-title { color: #e6eef8; }
+.dark .topbar-user-name { color: #e6eef8; }
+.dark .topbar-user-role { color: #7ad1ff; }
+.dark .topbar-icon-btn { color: #9fcfff; }
+
+/* Smooth transitions */
+html, body, .sidebar, .topbar, .page-container, .page-content {
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }

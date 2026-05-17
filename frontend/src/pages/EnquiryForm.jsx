@@ -27,7 +27,7 @@ export default function EnquiryForm() {
 
   const statuses = ['new', 'contacted', 'qualified', 'converted', 'lost'];
   const priorities = ['low', 'medium', 'high'];
-  const sources = ['Direct', 'Website', 'Referral', 'Phone', 'Social Media', 'Email'];
+  const sources = ['Direc1t', 'Website', 'Referral', 'Phone', 'Social Media', 'Email'];
   const serviceTypes = ['Residential Survey', 'Commercial Survey', 'Industrial Survey', 'Property Valuation', 'Consultation'];
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import api from '../services/api';
+import { userHasAccess } from '../utils/rbac';
 
 const AuthContext = createContext(null);
 
@@ -118,6 +119,14 @@ export function AuthProvider({ children }) {
   const isAuthenticated = !!user;
   const isAdmin = user?.role === 'admin' || user?.role === 'superadmin';
 
+  const hasAccess = (module, branch) => {
+    try {
+      return userHasAccess(user, module, branch);
+    } catch (e) {
+      return false;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -130,7 +139,8 @@ export function AuthProvider({ children }) {
         logout,
         isAuthenticated,
         isAdmin,
-        loading,
+          loading,
+          hasAccess,
       }}
     >
       {children}

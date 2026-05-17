@@ -39,6 +39,7 @@ const generateDummyEnquiries = () => {
       projectValue,
       leadScore,
       updatedAt,
+      followUpDate: new Date(Date.now() + ((idx % 14) + 1) * 24 * 60 * 60 * 1000).toISOString(),
       notes: ['Imported enquiry for testing'],
     };
   });
@@ -287,7 +288,9 @@ export default function Enquiries() {
   };
 
   const formatDate = (dateStr) => {
-    return new Date(dateStr).toLocaleDateString('en-IN', {
+    const date = new Date(dateStr);
+    if (Number.isNaN(date.getTime())) return '-';
+    return date.toLocaleDateString('en-IN', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -472,7 +475,7 @@ export default function Enquiries() {
           {renderHeaderTitle()}
           <div className="header-actions">
             <button className="btn-primary" onClick={() => { resetForm(); setShowForm(true); setEditingId(null); }}>
-              <Plus size={18} /> New Enquiry
+              <Plus size={18} /> New Enquiry1
             </button>
             {renderViewButtons()}
           </div>
