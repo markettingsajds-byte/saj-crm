@@ -1,6 +1,8 @@
 .branch-page {
   display: grid;
   gap: 22px;
+  background: var(--bg-secondary);
+  min-height: 100vh;
 }
 
 .branch-header,
@@ -14,12 +16,12 @@
 
 .branch-header {
   padding-bottom: 18px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .branch-kicker {
   margin: 0 0 6px;
-  color: #16a34a;
+  color: var(--success-color);
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -29,7 +31,7 @@
 .branch-form-title h2,
 .branch-list-header h2 {
   margin: 0;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .branch-actions,
@@ -54,15 +56,24 @@
 
 .branch-tool-btn {
   padding: 0 12px;
-  background: #f8fafc;
-  color: #334155;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
 }
 
 .branch-submit {
   padding: 0 16px;
-  background: #2563eb;
+  background: var(--accent-color);
   color: #ffffff;
+}
+
+.branch-submit:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.branch-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .branch-stats {
@@ -75,22 +86,22 @@
   display: grid;
   gap: 6px;
   padding: 16px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
 }
 
 .branch-stat svg {
-  color: #2563eb;
+  color: var(--accent-color);
 }
 
 .branch-stat strong {
-  color: #111827;
+  color: var(--text-primary);
   font-size: 1.35rem;
 }
 
 .branch-stat span {
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 0.88rem;
 }
 
@@ -99,21 +110,21 @@
   display: grid;
   gap: 18px;
   padding: 18px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--bg-primary);
 }
 
 .branch-form-section {
   display: grid;
   gap: 12px;
   padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-color);
 }
 
 .branch-form-section h3 {
   margin: 0;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 1rem;
 }
 
@@ -126,7 +137,7 @@
 .branch-field-grid label {
   display: grid;
   gap: 6px;
-  color: #334155;
+  color: var(--text-secondary);
   font-size: 0.84rem;
   font-weight: 700;
 }
@@ -136,9 +147,9 @@
 .branch-filters select,
 .branch-search {
   min-height: 40px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--bg-primary);
 }
 
 .branch-field-grid input,
@@ -146,7 +157,7 @@
 .branch-filters select {
   width: 100%;
   padding: 0 10px;
-  color: #111827;
+  color: var(--text-primary);
   font: inherit;
 }
 
@@ -155,8 +166,8 @@
   display: grid;
   gap: 14px;
   padding: 0;
-  background: #ffffff;
-  border: 1px solid #dbe3ef;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -167,7 +178,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 14px 16px;
-  background: #0f6fdc;
+  background: var(--accent-color);
   color: #ffffff;
 }
 
@@ -184,14 +195,19 @@
 
 .period-editor-header button,
 .period-footer button {
-  border: 1px solid #bfdbfe;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
-  background: #ffffff;
-  color: #0f6fdc;
+  background: var(--bg-primary);
+  color: var(--accent-color);
   font-weight: 800;
   min-height: 34px;
   padding: 0 10px;
   cursor: pointer;
+}
+
+.period-editor-header button:hover,
+.period-footer button:hover {
+  background: var(--bg-tertiary);
 }
 
 .period-week-tabs {
@@ -207,15 +223,15 @@
   display: inline-grid;
   place-items: center;
   border-radius: 999px;
-  background: #f1f5f9;
-  color: #334155;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   font-size: 0.78rem;
   font-weight: 800;
 }
 
 .period-week-tabs span.active {
-  background: #dbeafe;
-  color: #0f6fdc;
+  background: var(--accent-color);
+  color: #ffffff;
 }
 
 .period-day-list {
@@ -233,7 +249,7 @@
 
 .period-day-name {
   padding-top: 9px;
-  color: #111827;
+  color: var(--text-primary);
   font-size: 0.86rem;
   font-weight: 800;
 }
@@ -253,9 +269,9 @@
   width: 98px;
   min-height: 34px;
   padding: 0 8px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
-  color: #111827;
+  color: var(--text-primary);
   font: inherit;
   font-size: 0.85rem;
 }
@@ -267,20 +283,20 @@
   place-items: center;
   border: none;
   background: transparent;
-  color: #64748b;
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
 .period-icon-btn.add {
   margin-top: 2px;
-  color: #0f6fdc;
+  color: var(--accent-color);
 }
 
 .period-closed {
   min-height: 34px;
   display: inline-flex;
   align-items: center;
-  color: #94a3b8;
+  color: var(--text-secondary);
   font-size: 0.85rem;
 }
 
@@ -290,8 +306,8 @@
   justify-content: space-between;
   gap: 12px;
   padding: 14px 16px;
-  border-top: 1px solid #e5e7eb;
-  color: #64748b;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
   font-size: 0.86rem;
 }
 
@@ -304,14 +320,14 @@
   display: grid;
   gap: 18px;
   padding: 24px 32px 20px;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.22);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.22);
 }
 
 .clock-title {
-  color: #71717a;
+  color: var(--text-secondary);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -329,8 +345,8 @@
   height: 106px;
   border: none;
   border-radius: 5px;
-  background: #e5e5e5;
-  color: #18181b;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
   font-size: 4.8rem;
   line-height: 1;
   font-weight: 500;
@@ -338,12 +354,12 @@
 }
 
 .clock-time-box.active {
-  background: #eadcff;
-  color: #5b00e8;
+  background: var(--accent-color);
+  color: #ffffff;
 }
 
 .clock-separator {
-  color: #18181b;
+  color: var(--text-primary);
   font-size: 4.6rem;
   line-height: 1;
   text-align: center;
@@ -352,16 +368,16 @@
 .clock-meridiem-stack {
   display: grid;
   overflow: hidden;
-  border: 1px solid #a1a1aa;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
 }
 
 .clock-meridiem-stack button {
   height: 53px;
   border: none;
-  border-bottom: 1px solid #d4d4d8;
-  background: #ffffff;
-  color: #52525b;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-size: 1.25rem;
   font-weight: 800;
   cursor: pointer;
@@ -372,8 +388,8 @@
 }
 
 .clock-meridiem-stack button.active {
-  background: #f3e8ff;
-  color: #5b00e8;
+  background: var(--accent-color);
+  color: #ffffff;
 }
 
 .clock-face {
@@ -384,7 +400,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: #dedede;
+  background: var(--bg-tertiary);
 }
 
 .clock-face button {
@@ -395,7 +411,7 @@
   border: none;
   border-radius: 50%;
   background: transparent;
-  color: #18181b;
+  color: var(--text-primary);
   font-size: 1.25rem;
   font-weight: 500;
   cursor: pointer;
@@ -403,7 +419,7 @@
 
 .clock-face button.active,
 .clock-face button:hover {
-  background: #5b00e8;
+  background: var(--accent-color);
   color: #ffffff;
 }
 
@@ -415,7 +431,7 @@
   width: 6px;
   height: 118px;
   transform-origin: top center;
-  background: #5b00e8;
+  background: var(--accent-color);
 }
 
 .clock-hand::before {
@@ -427,7 +443,7 @@
   height: 11px;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: #5b00e8;
+  background: var(--accent-color);
 }
 
 .clock-hand::after {
@@ -439,7 +455,7 @@
   height: 58px;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: #5b00e8;
+  background: var(--accent-color);
 }
 
 .clock-controls {
@@ -460,8 +476,8 @@
   padding: 0 12px;
   border: none;
   border-radius: 4px;
-  background: #ffffff;
-  color: #5b00e8;
+  background: var(--bg-primary);
+  color: var(--accent-color);
   font-weight: 800;
   cursor: pointer;
   text-transform: uppercase;
@@ -469,8 +485,7 @@
 
 .minute-options button.active,
 .minute-options button:hover {
-  background: #f3e8ff;
-  color: #5b00e8;
+  background: var(--bg-tertiary);
 }
 
 .clock-actions {
@@ -483,13 +498,13 @@
 
 .clock-actions .clock-keyboard {
   justify-self: start;
-  color: #52525b;
+  color: var(--text-secondary);
   font-size: 1.3rem;
 }
 
 .clock-actions button:last-child,
 .clock-actions button:nth-last-child(2) {
-  color: #5b00e8;
+  color: var(--accent-color);
   font-size: 1rem;
 }
 
@@ -499,7 +514,7 @@
   align-items: center;
   gap: 8px;
   padding: 0 10px;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .branch-search input {
@@ -507,11 +522,13 @@
   border: none;
   outline: none;
   font: inherit;
+  background: transparent;
+  color: var(--text-primary);
 }
 
 .branch-table-wrap {
   overflow-x: auto;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
 }
 
@@ -524,19 +541,19 @@
 .branch-table th,
 .branch-table td {
   padding: 13px 14px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color);
   text-align: left;
 }
 
 .branch-table th {
-  background: #f8fafc;
-  color: #475569;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
   font-size: 0.78rem;
   text-transform: uppercase;
 }
 
 .branch-table td {
-  color: #334155;
+  color: var(--text-primary);
   font-size: 0.9rem;
 }
 
@@ -547,7 +564,7 @@
 
 .branch-table td span {
   margin-top: 3px;
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 0.8rem;
 }
 
@@ -560,13 +577,13 @@
 }
 
 .branch-status.active {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--success-color);
+  color: #ffffff;
 }
 
 .branch-status.inactive {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--error-color);
+  color: #ffffff;
 }
 
 @media (max-width: 1100px) {

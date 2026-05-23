@@ -19,6 +19,7 @@ export default function EnquiryForm() {
     priority: 'medium',
     source: 'Direct',
     description: '',
+    followUpDate: '',
   });
 
   const [loading, setLoading] = useState(isEdit);
@@ -147,53 +148,65 @@ export default function EnquiryForm() {
           </div>
         </div>
 
-        <div className="form-section">
-          <h2>Enquiry Details</h2>
+         <div className="form-section">
+           <h2>Enquiry Details</h2>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="serviceType">Service Type *</label>
-              <select
-                id="serviceType"
-                name="serviceType"
-                value={formData.serviceType}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Service Type</option>
-                {serviceTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-            </div>
+           <div className="form-row">
+             <div className="form-group">
+               <label htmlFor="serviceType">Service Type *</label>
+               <select
+                 id="serviceType"
+                 name="serviceType"
+                 value={formData.serviceType}
+                 onChange={handleChange}
+                 required
+               >
+                 <option value="">Select Service Type</option>
+                 {serviceTypes.map((type) => (
+                   <option key={type} value={type}>
+                     {type}
+                   </option>
+                 ))}
+               </select>
+             </div>
 
-            <div className="form-group">
-              <label htmlFor="projectValue">Project Value (₹)</label>
-              <input
-                type="number"
-                id="projectValue"
-                name="projectValue"
-                value={formData.projectValue}
-                onChange={handleChange}
-                placeholder="100000"
-              />
-            </div>
-          </div>
+             <div className="form-group">
+               <label htmlFor="projectValue">Project Value (₹)</label>
+               <input
+                 type="number"
+                 id="projectValue"
+                 name="projectValue"
+                 value={formData.projectValue}
+                 onChange={handleChange}
+                 placeholder="100000"
+               />
+             </div>
+           </div>
 
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Provide details about the enquiry..."
-              rows="4"
-            ></textarea>
-          </div>
-        </div>
+           <div className="form-group">
+             <label htmlFor="description">Description</label>
+             <textarea
+               id="description"
+               name="description"
+               value={formData.description}
+               onChange={handleChange}
+               placeholder="Provide details about the enquiry..."
+               rows="4"
+             ></textarea>
+           </div>
+           
+           <div className="form-group">
+             <label htmlFor="followUpDate">Follow Up Date *</label>
+             <input
+               type="date"
+               id="followUpDate"
+               name="followUpDate"
+               value={formData.followUpDate}
+               onChange={handleChange}
+               required
+             />
+           </div>
+         </div>
 
         <div className="form-section">
           <h2>Status & Priority</h2>

@@ -1,5 +1,6 @@
 import { Navigate, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import AppLayout from './components/AppLayout';
 import RequireAuth from './components/RequireAuth';
 import Dashboard from './pages/Dashboard';
@@ -29,41 +30,43 @@ import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/otp" element={<OTPLogin />} />
+    <ThemeProvider>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/otp" element={<OTPLogin />} />
 
-        <Route element={<RequireAuth />}>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/enquiries" element={<Enquiries />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/tasks" element={<Tasks />} />
-            <Route path="/master/branches" element={<BranchMaster />} />
-            <Route path="/attendance" element={<Navigate to="/attendance/punching" replace />} />
-            <Route path="/attendance/punching" element={<AttendancePunching />} />
-            <Route path="/attendance/management" element={<AttendanceManagement />} />
-            <Route path="/attendance/leaves" element={<LeaveManagement />} />
-            <Route path="/attendance/leave-manage" element={<LeaveManagement />} />
-            <Route path="/attendance/payroll" element={<PayrollCalculations />} />
-            <Route path="/master/departments" element={<DepartmentMaster />} />
-            <Route path="/master/employees" element={<EmployeeMaster />} />
-            <Route path="/master/designations" element={<DesignationMaster />} />
-            <Route path="/master/vehicle-maintenance" element={<VehicleMaintenanceMaster />} />
-            <Route path="/flow-templates" element={<FlowTemplates />} />
-            <Route path="/payments" element={<Payments />} />
-            <Route path="/leaves" element={<LeaveRequests />} />
-            <Route path="/leave-balance" element={<LeaveBalance />} />
-            <Route path="/form-template" element={<FormTemplate />} />
-            <Route path="/notification-template" element={<NotificationTemplate />} />
-            <Route path="/rbac-access" element={<RBACAccess />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route element={<RequireAuth />}>
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/enquiries" element={<Enquiries />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/tasks" element={<Tasks />} />
+              <Route path="/master/branches" element={<BranchMaster />} />
+              <Route path="/attendance" element={<Navigate to="/attendance/punching" replace />} />
+              <Route path="/attendance/punching" element={<AttendancePunching />} />
+              <Route path="/attendance/management" element={<AttendanceManagement />} />
+              <Route path="/attendance/leaves" element={<LeaveManagement />} />
+              <Route path="/attendance/leave-manage" element={<LeaveManagement />} />
+              <Route path="/attendance/payroll" element={<PayrollCalculations />} />
+              <Route path="/master/departments" element={<DepartmentMaster />} />
+              <Route path="/master/employees" element={<EmployeeMaster />} />
+              <Route path="/master/designations" element={<DesignationMaster />} />
+              <Route path="/master/vehicle-maintenance" element={<VehicleMaintenanceMaster />} />
+              <Route path="/flow-templates" element={<FlowTemplates />} />
+              <Route path="/payments" element={<Payments />} />
+              <Route path="/leaves" element={<LeaveRequests />} />
+              <Route path="/leave-balance" element={<LeaveBalance />} />
+              <Route path="/form-template" element={<FormTemplate />} />
+              <Route path="/notification-template" element={<NotificationTemplate />} />
+              <Route path="/rbac-access" element={<RBACAccess />} />
+              <Route path="*" element={<Navigate to="/login" replace />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </AuthProvider>
+        </Routes>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

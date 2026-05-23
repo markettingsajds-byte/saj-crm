@@ -159,32 +159,32 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  const { customerName, email, phone, serviceType, projectValue, status, priority, source, description, assignedTo, leadScore } = req.body;
+   const { customerName, email, phone, serviceType, projectValue, status, priority, source, description, assignedTo, leadScore, followUpDate } = req.body;
 
-  const newEnquiry = {
-    id: nextId++,
-    customerName,
-    email,
-    phone,
-    serviceType,
-    projectValue: parseInt(projectValue) || 0,
-    status: status || 'new',
-    priority: priority || 'medium',
-    source: source || 'Direct',
-    assignedTo: assignedTo || 'agent@example.com',
-    leadScore: parseInt(leadScore) || 50,
-    probability: status === 'qualified' ? 70 : status === 'converted' ? 100 : 20,
-    description,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    followUpDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    notes: [],
-    activity: [{ type: 'created', timestamp: new Date(), by: 'system' }],
-  };
+   const newEnquiry = {
+     id: nextId++,
+     customerName,
+     email,
+     phone,
+     serviceType,
+     projectValue: parseInt(projectValue) || 0,
+     status: status || 'new',
+     priority: priority || 'medium',
+     source: source || 'Direct',
+     assignedTo: assignedTo || 'agent@example.com',
+     leadScore: parseInt(leadScore) || 50,
+     probability: status === 'qualified' ? 70 : status === 'converted' ? 100 : 20,
+     description,
+     followUpDate: followUpDate ? new Date(followUpDate) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+     createdAt: new Date(),
+     updatedAt: new Date(),
+     notes: [],
+     activity: [{ type: 'created', timestamp: new Date(), by: 'system' }],
+   };
 
-  enquiries.push(newEnquiry);
-  res.status(201).json(newEnquiry);
-});
+   enquiries.push(newEnquiry);
+   res.status(201).json(newEnquiry);
+ });
 
 router.get("/:id", (req, res) => {
   const enquiry = enquiries.find((e) => e.id == req.params.id);
@@ -195,15 +195,18 @@ router.get("/:id", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  const enquiry = enquiries.find((e) => e.id == req.params.id);
-  if (!enquiry) {
-    return res.status(404).json({ message: 'Enquiry not found' });
-  }
+   const enquiry = enquiries.find((e) => e.id == req.params.id);
+   if (!enquiry) {
+     return res.status(404).json({ message: 'Enquiry not found' });
+   }
 
-  Object.assign(enquiry, req.body);
-  enquiry.updatedAt = new Date();
-  res.json(enquiry);
-});
+   Object.assign(enquiry, req.body);
+   if (req.body.followUpDate) {
+     enquiry.followUpDate = new Date(req.body.followUpDate);
+   }
+   enquiry.updatedAt = new Date();
+   res.json(enquiry);
+ });
 
 router.patch("/:id/status", (req, res) => {
   const enquiry = enquiries.find((e) => e.id == req.params.id);

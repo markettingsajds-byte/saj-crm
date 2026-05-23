@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Bell, RefreshCw } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
+import { Bell, RefreshCw, Moon, Sun } from 'lucide-react';
 import './TopBar.css';
 
 const pageTitles = {
@@ -29,6 +30,7 @@ const pageTitles = {
 export default function TopBar() {
   const { pathname } = useLocation();
   const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const title = pageTitles[pathname] || 'Dashboard';
 
   const initials = (user?.fullName || 'U')
@@ -43,6 +45,9 @@ export default function TopBar() {
         </button>
         <button className="topbar-icon-btn" title="Notifications">
           <Bell size={18} />
+        </button>
+        <button className="topbar-icon-btn theme-toggle" title="Toggle theme" onClick={toggleTheme}>
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
         </button>
         <div className="topbar-user">
           <div className="topbar-avatar">{initials}</div>
